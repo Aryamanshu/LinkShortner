@@ -11,6 +11,12 @@ export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const handleSignIn = () => {
+    if (email === 'ankit' && password === 'ankit') {
+      router.push('/dashboard')
+    }
+  }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-bl from-custom-gradient-start via-custom-gradient-middle to-custom-gradient-end">
       <div className="w-10/12 h-full sm:min-w-full md:min-w-80 md:min-h-screen lg:max-w-80 xl:max-w-80">
@@ -53,7 +59,7 @@ export default function Home() {
               Forgot Password ?
             </div>
           </div>
-          <button className="bg-slate-800 text-white font-semibold text-xl pt-3 pb-4 px-4 rounded-lg w-full md:mt-4 xl:mt-5">
+          <button className="bg-slate-800 text-white font-semibold text-xl pt-3 pb-4 px-4 rounded-lg w-full md:mt-4 xl:mt-5" onClick={handleSignIn}>
             Sign In
           </button>
           <div className="flex items-center justify-center md:mt-4 xl:mt-3">
