@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Icons } from "@/components/icons";
-
+import toast, { Toaster } from "react-hot-toast";
 export default function Home() {
   const router = useRouter();
   //AUthOpen
@@ -11,11 +11,31 @@ export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleSignIn = () => {
-    if (email === 'ankit' && password === 'ankit') {
-      router.push('/dashboard')
+  const handleSignIn = async () => {
+    const bodyObject = {
+      username: email,
+      password: password,
+    };
+    const response = await fetch("http://localhost:8000/api/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bodyObject),
+    });
+    console.log("Response", response);
+    const result = await response.json();
+    console.log("Result of login" , result);
+    if (response.ok) {
+      toast.success("Successfully Signed In!");
+      setTimeout(() => {
+        router.push(`/dashboard/${result.data._id}`)
+      }, 1500);
     }
-  }
+    else{
+      toast.error("Invalid Username or Password");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-bl from-custom-gradient-start via-custom-gradient-middle to-custom-gradient-end">
@@ -24,17 +44,18 @@ export default function Home() {
           <div className="font-sans font-semibold md:mt-2 xl:mt-3 text-4xl">
             Sign In
           </div>
+          <Toaster/>
           <div className="font-sans text-base py-3 font-medium">
             Welcome back {`you've`} been missed
           </div>
           <div className="font-sans mt-2 text-lg font-semibold mb-1.5 ">
-            Email ID
+            Username
           </div>
           <input
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             className="block w-full rounded-lg border-0  py-3.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            placeholder="Enter Email ID"
+            placeholder="Enter Username"
           />
 
           <div className="font-sans text-lg font-semibold md:mt-2 xl:mt-5 mb-1.5">
@@ -42,7 +63,7 @@ export default function Home() {
           </div>
           <input
             onChange={(e) => setPassword(e.target.value)}
-            type="text"
+            type="password"
             className="block w-full rounded-lg border-0 py-3.5 pl-4 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder="Enter Password"
           />

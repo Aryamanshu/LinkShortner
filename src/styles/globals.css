@@ -1,3 +1,75 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@media (max-width: 1600px) {
+
+    .deleteOptions {
+        font-size: 19px;
+        color: #f00;
+    }
+
+    .inActive {
+        font-size: 19px;
+        color: #9074d3;
+    }
+
+    .editOptions {
+        font-size: 19px;
+        color: #36c6d5;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    .deleteOptions {
+        font-size: 16px;
+        color: #f00;
+    }
+
+    .inActive {
+        font-size: 16px;
+        color: #9074d3;
+    }
+
+    .editOptions {
+        font-size: 16px;
+        color: #36c6d5;
+    }
+}
+
+.liveCard {
+    height: 75vh;
+}
+.linkDiv{
+    height: 9vh;
+}
+.headerDiv{
+    height: 10vh;
+}
+
+@media (max-width: 1200px) {
+
+    .liveCard {
+        height: 80vh;
+    }
+    .linkDiv{
+        height: 11vh;
+    }
+    .headerDiv{
+        height: 10vh;
+    }
+}
+
+@media (max-width: 1600px) {
+    .liveCard {
+        height: 80vh;
+    }
+    .linkDiv{
+        height: 11vh;
+    }
+    .headerDiv{
+        height: 10vh;
+    }
+}
