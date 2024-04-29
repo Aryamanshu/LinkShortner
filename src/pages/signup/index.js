@@ -1,3 +1,4 @@
+import { URI } from "@/source";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,7 +13,7 @@ export default function Signup() {
       username: userName,
       password: password,
     };
-    const response = await fetch("http://localhost:8000/api/signup", {
+    const response = await fetch(`${URI}/api/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
