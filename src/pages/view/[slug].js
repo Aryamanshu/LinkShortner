@@ -14,7 +14,7 @@ export default function View() {
     const response = await fetch("http://localhost:8000/api/getlinks", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(bodyObject),
     });

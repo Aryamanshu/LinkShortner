@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Icons } from "@/components/icons";
 import toast, { Toaster } from "react-hot-toast";
+import { URI } from "@/source";
 export default function Home() {
   const router = useRouter();
   //AUthOpen
@@ -16,23 +17,22 @@ export default function Home() {
       username: email,
       password: password,
     };
-    const response = await fetch("http://localhost:8000/api/signin", {
+    const response = await fetch(`${URI}/api/signin`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(bodyObject),
     });
     console.log("Response", response);
     const result = await response.json();
-    console.log("Result of login" , result);
+    console.log("Result of login", result);
     if (response.ok) {
       toast.success("Successfully Signed In!");
       setTimeout(() => {
-        router.push(`/dashboard/${result.data._id}`)
+        router.push(`/dashboard/${result.data._id}`);
       }, 1500);
-    }
-    else{
+    } else {
       toast.error("Invalid Username or Password");
     }
   };
@@ -44,7 +44,7 @@ export default function Home() {
           <div className="font-sans font-semibold md:mt-2 xl:mt-3 text-4xl">
             Sign In
           </div>
-          <Toaster/>
+          <Toaster />
           <div className="font-sans text-base py-3 font-medium">
             Welcome back {`you've`} been missed
           </div>
@@ -80,7 +80,10 @@ export default function Home() {
               Forgot Password ?
             </div>
           </div>
-          <button className="bg-slate-800 text-white font-semibold text-xl pt-3 pb-4 px-4 rounded-lg w-full md:mt-4 xl:mt-5" onClick={handleSignIn}>
+          <button
+            className="bg-slate-800 text-white font-semibold text-xl pt-3 pb-4 px-4 rounded-lg w-full md:mt-4 xl:mt-5"
+            onClick={handleSignIn}
+          >
             Sign In
           </button>
           <div className="flex items-center justify-center md:mt-4 xl:mt-3">
@@ -160,7 +163,7 @@ export default function Home() {
             {`Don't`} have an account ?
             <span
               className="font-sans font-medium text-base text-cyan-800 cursor-pointer  underline-offset-2 ml-2"
-              onClick={() => router.push('/signup')}
+              onClick={() => router.push("/signup")}
             >
               Sign Up
             </span>
