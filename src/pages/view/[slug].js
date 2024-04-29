@@ -49,7 +49,7 @@ export default function View() {
           <p class="circle-inner">AY</p>
         </div>
         <div className="userName">
-        @{userName?.data.username}
+        @{userName?.data?.username}
         </div>
         {userData.length > 0 ? userData.map((item, index) => {
           return (
