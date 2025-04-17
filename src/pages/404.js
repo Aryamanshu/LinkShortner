@@ -12,7 +12,7 @@ export default function Custom404() {
             <div className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-secondary-400 text-9xl font-bold animate-pulse-slow">404</div>
             <h1 className="mt-4 text-3xl font-bold text-white sm:text-4xl">Page not found</h1>
             <p className="mt-6 text-base leading-7 text-gray-400">
-              Sorry, the link you're looking for doesn't exist or has been deactivated.
+              Sorry, the link you&apos;re looking for doesn&apos;t exist or has been deactivated.
             </p>
           </div>
 

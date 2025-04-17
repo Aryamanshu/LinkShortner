@@ -198,7 +198,7 @@ export default function UserLinksPage() {
 
                   <div>
                     <div className="flex items-center justify-center sm:justify-start mb-2">
-                      <h1 className="text-3xl font-bold text-beige-500">{userData?.username}'s Links</h1>
+                      <h1 className="text-3xl font-bold text-beige-500">{userData?.username}&apos;s Links</h1>
                       <div className="ml-3 px-2 py-1 bg-teal-500/20 rounded-md text-teal-500 text-xs font-semibold uppercase tracking-wider">
                         Public
                       </div>
@@ -234,7 +234,7 @@ export default function UserLinksPage() {
                     </div>
 
                     <h3 className="text-xl font-bold text-beige-500 mb-3">No links available</h3>
-                    <p className="text-beige-600 max-w-md mx-auto">This user hasn't created any public links yet. Check back later or create your own collection of links.</p>
+                    <p className="text-beige-600 max-w-md mx-auto">This user hasn&apos;t created any public links yet. Check back later or create your own collection of links.</p>
 
                     <Link
                       href="/"

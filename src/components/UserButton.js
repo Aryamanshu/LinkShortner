@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
@@ -70,11 +71,15 @@ export default function UserButton({ user }) {
         aria-haspopup="true"
       >
         {user?.avatar ? (
-          <img
-            src={user.avatar}
-            alt={user.username || 'User'}
-            className="h-10 w-10 rounded-full object-cover border-2 border-teal-500/50 group-hover:border-teal-500 transition-colors"
-          />
+          <div className="h-10 w-10 relative rounded-full overflow-hidden border-2 border-teal-500/50 group-hover:border-teal-500 transition-colors">
+            <Image
+              src={user.avatar}
+              alt={user.username || 'User'}
+              fill
+              sizes="40px"
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-teal-600 to-teal-500 flex items-center justify-center text-beige-500 font-bold text-lg border-2 border-teal-500/50 group-hover:border-teal-500 transition-colors">
             {getInitials()}
@@ -107,11 +112,15 @@ export default function UserButton({ user }) {
             <div className="p-4 border-b border-teal-700/20">
               <div className="flex items-center">
                 {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.username || 'User'}
-                    className="h-10 w-10 rounded-full object-cover border-2 border-teal-500/50"
-                  />
+                  <div className="h-10 w-10 relative rounded-full overflow-hidden border-2 border-teal-500/50">
+                    <Image
+                      src={user.avatar}
+                      alt={user.username || 'User'}
+                      fill
+                      sizes="40px"
+                      className="object-cover"
+                    />
+                  </div>
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gradient-to-br from-teal-600 to-teal-500 flex items-center justify-center text-beige-500 font-bold text-lg">
                     {getInitials()}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { URI } from "@/source";
@@ -32,7 +32,7 @@ export default function AnalyticsPage() {
   };
 
   // Fetch user data and links
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(`${URI}/api/getlinks`, {
@@ -59,13 +59,13 @@ export default function AnalyticsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug, setLinkData, setUserData, setIsLoading]);
 
   useEffect(() => {
     if (slug) {
       fetchUserData();
     }
-  }, [slug]);
+  }, [slug, fetchUserData]);
 
   // Calculate statistics for the dashboard
   const calculateStats = () => {

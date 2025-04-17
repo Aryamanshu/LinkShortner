@@ -1,6 +1,6 @@
 import { URI } from "@/source";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, sync, useCycle } from "framer-motion";
 
 export default function View() {
@@ -9,7 +9,7 @@ export default function View() {
   const [userName , setUsername] = useState("")
   const { slug } = router.query;
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     const bodyObject = {
       userID: slug,
     };
@@ -24,13 +24,13 @@ export default function View() {
     const result = await response.json();
     setUserData(result.data.links);
     setUsername(result)
-  };
+  }, [slug, setUserData, setUsername]);
 
   useEffect(() => {
     if (slug) {
       fetchUserData();
     }
-  }, [slug]);
+  }, [slug, fetchUserData]);
 
   const handlelink = (url) => {
     const newTab = window.open(url, '_blank');

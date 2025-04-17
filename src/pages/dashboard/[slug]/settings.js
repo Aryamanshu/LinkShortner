@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { URI } from "@/source";
@@ -51,7 +51,7 @@ export default function SettingsPage() {
   };
 
   // Fetch user data
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     setIsLoading(true);
     try {
       // First, get user data
@@ -106,13 +106,13 @@ export default function SettingsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [slug, setUserData, setUsername, setEmail, setIsLoading]);
 
   useEffect(() => {
     if (slug) {
       fetchUserData();
     }
-  }, [slug]);
+  }, [slug, fetchUserData]);
 
   // Handle profile update
   const handleProfileUpdate = async (e) => {

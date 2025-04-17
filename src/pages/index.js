@@ -303,7 +303,7 @@ export default function Home() {
               className="mt-10 text-center text-sm text-beige-600"
               variants={itemVariants}
             >
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/signup" className="font-medium text-teal-500 hover:text-teal-400 transition-colors">
                 Sign up now
               </Link>
