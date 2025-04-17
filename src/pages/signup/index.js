@@ -55,11 +55,13 @@ export default function Signup() {
           router.push("/");
         }, 1000);
       } else {
-        toast.error(result.error || "Failed to create account");
+        const errorMessage = result.message || result.error || "Failed to create account";
+        console.error("API error details:", result);
+        toast.error(errorMessage);
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
       console.error("Sign up error:", error);
+      toast.error(`Error: ${error.message || "An unknown error occurred"}`);
     } finally {
       setIsLoading(false);
     }

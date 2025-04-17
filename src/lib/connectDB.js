@@ -22,6 +22,8 @@ async function connectDB() {
       throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
     }
 
+    console.log('Connecting to MongoDB...', MONGODB_URI.substring(0, 20) + '...');
+
     cached.promise = mongoose
       .connect(MONGODB_URI, opts)
       .then((mongoose) => {

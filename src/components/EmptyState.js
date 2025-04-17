@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import { motion } from 'framer-motion';
 
 export default function EmptyState({
   title = 'No data found',
@@ -10,29 +11,89 @@ export default function EmptyState({
   className = '',
 }) {
   return (
-    <div className={`text-center py-12 ${className} bg-dark-800 border border-teal-700/20 rounded-xl shadow-sm p-8`}>
+    <motion.div
+      className={`text-center py-12 ${className} bg-gradient-to-br from-dark-800 to-dark-700 border border-teal-700/30 rounded-xl shadow-lg p-10`}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay: 0.2
+      }}
+    >
       {icon && (
-        <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-teal-700/10 text-teal-500 mb-6">
-          {icon}
-        </div>
+        <motion.div
+          className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-teal-700/20 text-teal-500 mb-8"
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+            delay: 0.3
+          }}
+        >
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 5, 0, -5, 0]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "loop"
+            }}
+          >
+            {icon}
+          </motion.div>
+        </motion.div>
       )}
 
-      <h3 className="text-xl font-medium text-beige-500">{title}</h3>
+      <motion.h3
+        className="text-2xl font-bold text-beige-500"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        {title}
+      </motion.h3>
 
-      <p className="mt-3 text-beige-600 max-w-md mx-auto">
+      <motion.p
+        className="mt-4 text-beige-600 max-w-md mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
         {description}
-      </p>
+      </motion.p>
 
       {action && (
-        <div className="mt-8">
-          <Button onClick={action} variant="primary" className="px-6 py-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <motion.div
+          className="mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Button onClick={action} variant="primary" className="px-8 py-3 shadow-lg">
+            <motion.svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
+            </motion.svg>
             {actionText}
           </Button>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
