@@ -1,22 +1,67 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function DashboardStats({ stats }) {
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 12
+      }
+    }
+  };
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Total Links */}
-      <div className="bg-dark-800 border border-teal-700/20 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <motion.div
+        className="bg-gradient-to-br from-dark-800 to-dark-700 border border-teal-700/30 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+        variants={itemVariants}
+        whileHover={{ scale: 1.02 }}
+      >
         <div className="flex items-center">
-          <div className="p-3 rounded-full bg-teal-700/10 text-teal-500">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <motion.div
+            className="p-4 rounded-full bg-teal-700/20 text-teal-500"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             </svg>
-          </div>
+          </motion.div>
           <div className="ml-5">
             <p className="text-sm font-medium text-beige-600">Total Links</p>
-            <p className="text-2xl font-semibold text-beige-500">{stats?.totalLinks || 0}</p>
+            <motion.p
+              className="text-3xl font-bold text-beige-500"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {stats?.totalLinks || 0}
+            </motion.p>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-5 pt-4 border-t border-teal-700/10">
           <div className="flex items-center text-sm">
             <span className="text-teal-500 mr-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -24,25 +69,48 @@ export default function DashboardStats({ stats }) {
               </svg>
             </span>
             <span className="text-teal-500 font-medium">Active:</span>
-            <span className="ml-1 text-beige-500">{stats?.activeLinks || 0}</span>
+            <motion.span
+              className="ml-1 text-beige-500 font-semibold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              {stats?.activeLinks || 0}
+            </motion.span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Total Clicks */}
-      <div className="bg-dark-800 border border-teal-700/20 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <motion.div
+        className="bg-gradient-to-br from-dark-800 to-dark-700 border border-teal-700/30 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+        variants={itemVariants}
+        whileHover={{ scale: 1.02 }}
+      >
         <div className="flex items-center">
-          <div className="p-3 rounded-full bg-teal-600/10 text-teal-600">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <motion.div
+            className="p-4 rounded-full bg-teal-600/20 text-teal-600"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
             </svg>
-          </div>
+          </motion.div>
           <div className="ml-5">
             <p className="text-sm font-medium text-beige-600">Total Clicks</p>
-            <p className="text-2xl font-semibold text-beige-500">{stats?.totalClicks || 0}</p>
+            <motion.p
+              className="text-3xl font-bold text-beige-500"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {stats?.totalClicks || 0}
+            </motion.p>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-5 pt-4 border-t border-teal-700/10">
           <div className="flex items-center text-sm">
             <span className="text-teal-600 mr-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -50,29 +118,48 @@ export default function DashboardStats({ stats }) {
               </svg>
             </span>
             <span className="text-teal-600 font-medium">Avg per link:</span>
-            <span className="ml-1 text-beige-500">
+            <motion.span
+              className="ml-1 text-beige-500 font-semibold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
               {stats?.totalLinks > 0 ? Math.round((stats?.totalClicks || 0) / stats?.totalLinks) : 0}
-            </span>
+            </motion.span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Most Popular */}
-      <div className="bg-dark-800 border border-teal-700/20 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <motion.div
+        className="bg-gradient-to-br from-dark-800 to-dark-700 border border-teal-700/30 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+        variants={itemVariants}
+        whileHover={{ scale: 1.02 }}
+      >
         <div className="flex items-center">
-          <div className="p-3 rounded-full bg-teal-500/10 text-teal-500">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <motion.div
+            className="p-4 rounded-full bg-teal-500/20 text-teal-500"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
             </svg>
-          </div>
+          </motion.div>
           <div className="ml-5">
             <p className="text-sm font-medium text-beige-600">Most Popular</p>
-            <p className="text-2xl font-semibold text-beige-500 truncate max-w-[180px]">
+            <motion.p
+              className="text-3xl font-bold text-beige-500 truncate max-w-[180px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               {stats?.mostPopular?.title || 'No links yet'}
-            </p>
+            </motion.p>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-5 pt-4 border-t border-teal-700/10">
           <div className="flex items-center text-sm">
             <span className="text-teal-500 mr-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,10 +168,17 @@ export default function DashboardStats({ stats }) {
               </svg>
             </span>
             <span className="text-teal-500 font-medium">Clicks:</span>
-            <span className="ml-1 text-beige-500">{stats?.mostPopular?.clicks || 0}</span>
+            <motion.span
+              className="ml-1 text-beige-500 font-semibold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              {stats?.mostPopular?.clicks || 0}
+            </motion.span>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Badge from './Badge';
 import EmptyState from './EmptyState';
 import LoadingState from './LoadingState';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function EnhancedLinkTable({
   links = [],
@@ -29,13 +30,13 @@ export default function EnhancedLinkTable({
   const sortedLinks = [...links].sort((a, b) => {
     let aValue = a[sortBy];
     let bValue = b[sortBy];
-    
+
     // Handle dates
     if (sortBy === 'createdAt') {
       aValue = new Date(aValue).getTime();
       bValue = new Date(bValue).getTime();
     }
-    
+
     if (sortOrder === 'asc') {
       return aValue > bValue ? 1 : -1;
     } else {
@@ -143,8 +144,8 @@ export default function EnhancedLinkTable({
             <tr key={link._id} className="hover:bg-dark-700 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  link.status === 'active' 
-                    ? 'bg-teal-700/20 text-teal-500' 
+                  link.status === 'active'
+                    ? 'bg-teal-700/20 text-teal-500'
                     : 'bg-red-700/20 text-red-500'
                 }`}>
                   <span className={`h-2 w-2 rounded-full mr-1.5 ${
@@ -202,12 +203,12 @@ export default function EnhancedLinkTable({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                     </svg>
                   </button>
-                  
+
                   <button
                     onClick={() => onToggleStatus(link._id, link.status)}
                     className={`transition-colors ${
-                      link.status === 'active' 
-                        ? 'text-beige-600 hover:text-red-500' 
+                      link.status === 'active'
+                        ? 'text-beige-600 hover:text-red-500'
                         : 'text-beige-600 hover:text-teal-500'
                     }`}
                     title={link.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -222,7 +223,7 @@ export default function EnhancedLinkTable({
                       </svg>
                     )}
                   </button>
-                  
+
                   <button
                     onClick={() => onDelete(link._id, link.title)}
                     className="text-beige-600 hover:text-red-500 transition-colors"
