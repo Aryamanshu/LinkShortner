@@ -16,18 +16,31 @@ async function connectDB() {
       bufferCommands: false,
     };
 
+    const MONGODB_URI = process.env.MONGODB_URI;
+
+    if (!MONGODB_URI) {
+      throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+    }
+
     cached.promise = mongoose
-      .connect(
-        "mongodb+srv://root:root@cluster0.nknrg9k.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-        opts
-      )
+      .connect(MONGODB_URI, opts)
       .then((mongoose) => {
-        console.log("Db Connected!");
+        console.log("Database connected successfully");
         return mongoose;
+      })
+      .catch((err) => {
+        console.error("Database connection error:", err);
+        throw err;
       });
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
+
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    console.error("Failed to connect to database:", error);
+    throw error;
+  }
 }
 
 export default connectDB;

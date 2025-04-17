@@ -7,9 +7,12 @@ const userSchema = new mongoose.Schema({
     {
       title: { type: String },
       link: { type: String },
-      status: { type: String },
+      shortCode: { type: String, unique: true },
+      status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+      createdAt: { type: Date, default: Date.now },
+      clicks: { type: Number, default: 0 }
     },
   ],
-});
-module.exports =mongoose.models.User || mongoose.model('User', userSchema);
-// module.exports = mongoose.model("User", userSchema);
+}, { timestamps: true });
+
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);

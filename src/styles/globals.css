@@ -2,191 +2,259 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (max-width: 1600px) {
+  body {
+    @apply font-sans text-beige-500 antialiased bg-dark-800;
+  }
 
-    .deleteOptions {
-        font-size: 19px;
-        color: #f00;
-    }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold text-beige-500;
+  }
 
-    .inActive {
-        font-size: 19px;
-        color: #9074d3;
-    }
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
 
-    .editOptions {
-        font-size: 19px;
-        color: #36c6d5;
-    }
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
 }
 
-@media (max-width: 1200px) {
+/* Component styles */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-800;
+  }
 
-    .deleteOptions {
-        font-size: 16px;
-        color: #f00;
-    }
+  .btn-primary {
+    @apply btn bg-teal-700 text-beige-500 hover:bg-teal-800 focus:ring-teal-600;
+  }
 
-    .inActive {
-        font-size: 16px;
-        color: #9074d3;
-    }
+  .btn-secondary {
+    @apply btn bg-teal-600 text-beige-500 hover:bg-teal-700 focus:ring-teal-500;
+  }
 
-    .editOptions {
-        font-size: 16px;
-        color: #36c6d5;
-    }
+  .btn-accent {
+    @apply btn bg-teal-500 text-dark-800 hover:bg-teal-600 focus:ring-teal-400;
+  }
+
+  .btn-outline {
+    @apply btn border border-teal-700 bg-dark-800 text-beige-500 hover:bg-dark-700 focus:ring-teal-600;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+
+  .btn-success {
+    @apply btn bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+  }
+
+  .card {
+    @apply bg-dark-700 rounded-xl border border-teal-700/30 shadow-card overflow-hidden transition-shadow duration-300 hover:shadow-card-hover;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-2 rounded-lg border border-teal-700/30 bg-dark-700 text-beige-500 focus:ring-2 focus:ring-teal-600 focus:border-teal-600 outline-none transition-colors duration-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-green-900 text-green-200;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-900 text-red-200;
+  }
+
+  .badge-primary {
+    @apply badge bg-teal-900 text-teal-200;
+  }
+
+  .badge-secondary {
+    @apply badge bg-teal-800 text-teal-200;
+  }
 }
 
+/* Icon styles */
+.deleteOptions {
+  @apply text-red-500 text-lg;
+}
+
+.inActive {
+  @apply text-teal-500 text-lg;
+}
+
+.editOptions {
+  @apply text-green-500 text-lg;
+}
+
+/* Layout styles */
+.app-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.page-container {
+  @apply py-6 sm:py-8 lg:py-12;
+}
+
+.section {
+  @apply mb-8 sm:mb-12;
+}
+
+.header {
+  @apply bg-dark-800 border-b border-teal-700/20 shadow-sm py-4;
+}
+
+.footer {
+  @apply bg-dark-900 text-beige-500 py-8 border-t border-teal-700/20;
+}
+
+/* Dashboard layout */
+.dashboard-container {
+  @apply grid grid-cols-1 lg:grid-cols-12 gap-6;
+}
+
+.dashboard-sidebar {
+  @apply lg:col-span-3 xl:col-span-2 bg-dark-700 border border-teal-700/20 rounded-xl p-4;
+}
+
+.dashboard-main {
+  @apply lg:col-span-9 xl:col-span-10;
+}
+
+.dashboard-card {
+  @apply card p-6 bg-gradient-to-br from-dark-700 to-dark-800 backdrop-blur-sm border-teal-700/30;
+}
+
+/* Responsive layout adjustments */
 .liveCard {
-    height: 75vh;
+  @apply min-h-[500px] lg:min-h-[600px];
 }
 
 .linkDiv {
-    height: 9vh;
+  @apply py-4;
 }
 
 .headerDiv {
-    height: 10vh;
+  @apply py-2 sm:py-3 lg:py-4;
 }
 
-@media (max-width: 1200px) {
-
-    .liveCard {
-        height: 80vh;
-    }
-
-    .linkDiv {
-        height: 11vh;
-    }
-
-    .headerDiv {
-        height: 10vh;
-    }
-}
-
-@media (max-width: 1600px) {
-    .liveCard {
-        height: 80vh;
-    }
-
-    .linkDiv {
-        height: 11vh;
-    }
-
-    .headerDiv {
-        height: 10vh;
-    }
-}
-
+/* QR Code styles */
 .qrcode__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
+  @apply flex flex-col items-center justify-center w-full;
 }
 
 .qrcode__container--parent {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  @apply flex gap-4 items-center justify-center w-full;
 }
 
 .qrcode__input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 30%;
-    margin-top: 20px;
+  @apply flex flex-col items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/5 mt-6;
 }
-
 
 .qrcode__input input {
-    width: 100%;
-    padding: 10px;
-    font-size: 12px;
-    outline: none;
-    resize: none;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-}
-
-.qrcode__input button,
-.qrcode__download button {
-    display: inline-block;
-    padding: 7px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    font-weight: 500;
-    transition: background-color 0.2s;
+  @apply form-input mb-4 text-sm;
 }
 
 .qrcode__download {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10%;
+  @apply flex flex-col items-center gap-4 w-full;
+}
+
+.qrcode__image {
+  @apply p-4 bg-beige-500 rounded-lg shadow-sm;
 }
 
 .qrcode__download button {
-    margin-top: 10px;
+  @apply btn-primary w-full sm:w-auto;
 }
 
-.backggroundColor {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    height: 100vh;
+/* Background gradient */
+.gradient-background {
+  @apply bg-gradient-to-br from-teal-700 via-teal-600 to-teal-500 bg-size-200 animate-gradient-slow;
 }
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+@keyframes gradient-slow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.circle {
-    display: inline-block;
-    background-color: #a0eefc;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 1px;
-    margin-bottom: 10px;
-    border-radius: 50%;
+/* Auth pages background */
+.auth-background {
+  @apply bg-gradient-to-r from-teal-700 to-teal-600;
 }
 
-.circle-inner {
-    color: rgb(0, 179, 211);
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    text-decoration: none;
-    height: 100px;
-    width: 100px;
-    font-size: 34px;
+/* Avatar and user elements */
+.avatar {
+  @apply inline-flex items-center justify-center rounded-full bg-teal-700/20 text-teal-500;
 }
 
-.userName{
-    margin-bottom: 20%;
-    font-size: 20px;
-    font-weight: 600;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: white;
+.avatar-sm {
+  @apply avatar h-8 w-8 text-sm;
+}
+
+.avatar-md {
+  @apply avatar h-12 w-12 text-lg;
+}
+
+.avatar-lg {
+  @apply avatar h-16 w-16 text-xl;
+}
+
+.user-name {
+  @apply text-lg font-medium text-beige-500;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-in-out;
+}
+
+/* Utility classes */
+.truncate-2-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bg-size-200 {
+  background-size: 200% 200%;
+}
+
+.animate-gradient-slow {
+  animation: gradient-slow 15s ease infinite;
 }

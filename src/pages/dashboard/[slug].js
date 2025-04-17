@@ -87,9 +87,9 @@ export default function Dashboard() {
   useEffect(() => {
     console.log("Id", slug);
     if (typeof window !== "undefined") {
-      const currentUrl = window.location.href;
-      const replacedWord = currentUrl.replace('dashboard', 'view')
-      seturl(replacedWord);
+      // Set the base URL for the user's dashboard
+      const baseUrl = window.location.origin;
+      seturl(`${baseUrl}/s/`);
     }
   }, []);
 
@@ -115,11 +115,15 @@ export default function Dashboard() {
     }
   }, [slug]);
 
-  const handleOpenQR = () => {
-    setOpenQr(true)
-    if (!url) {
+  const [selectedShortCode, setSelectedShortCode] = useState(null);
+
+  const handleOpenQR = (shortCode) => {
+    if (!url || !shortCode) {
+      toast.error("No short URL available for QR code");
       return;
     }
+    setSelectedShortCode(shortCode);
+    setOpenQr(true);
     setQrIsVisible(true);
   };
 
@@ -131,7 +135,7 @@ export default function Dashboard() {
 
   const handleCloseAddLinks = () => setOpenAddLink(false);
 
-  
+
 
 
   const downloadQRCode = () => {
@@ -192,6 +196,78 @@ export default function Dashboard() {
       });
   }
 
+  function copyShortUrl(shortCode) {
+    if (!shortCode) return;
+    const shortUrl = `${url}${shortCode}`;
+    copyToClipboard(shortUrl);
+  }
+
+  const toggleLinkStatus = async (linkId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+      const bodyObject = {
+        userId: slug,
+        linkId: linkId,
+        updates: { status: newStatus }
+      };
+
+      const response = await fetch(`${URI}/api/updatelink`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bodyObject)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setLinkData(result.data.links);
+        toast.success(`Link ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully`);
+      } else {
+        toast.error(result.error || "Failed to update link status");
+      }
+    } catch (error) {
+      console.error("Error toggling link status:", error);
+      toast.error("An error occurred while updating link status");
+    }
+  };
+
+  const deleteLink = async (linkId, linkTitle) => {
+    try {
+      // Confirm deletion with the user
+      if (!confirm(`Are you sure you want to delete the link "${linkTitle}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      const bodyObject = {
+        userId: slug,
+        linkId: linkId
+      };
+
+      const response = await fetch(`${URI}/api/deletelink`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bodyObject)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setLinkData(result.data.links);
+        toast.success("Link deleted successfully");
+      } else {
+        toast.error(result.error || "Failed to delete link");
+      }
+    } catch (error) {
+      console.error("Error deleting link:", error);
+      toast.error("An error occurred while deleting the link");
+    }
+  };
+
   const handleLinks = async () => {
     const bodyObject = {
       userId: slug,
@@ -236,96 +312,60 @@ export default function Dashboard() {
             <span className="text-base cursor-pointer xl:mt-1.5 2xl:mt-4 font-sans text-slate-500 mr-5">
               Blogs
             </span>
-            <button className="bg-purple-200 text-sm text-purple-700 font-medium ml-auto rounded-lg xl:h-8 xl:pt-0 pb-0 pl-1 pr-1 2xl:pt-1 pb-1 pl-2 pr-2 h-10 mt-2">
+            <button
+              className="bg-purple-200 text-sm text-purple-700 font-medium ml-auto rounded-lg xl:h-8 xl:pt-0 2xl:pt-1 px-2 h-10 mt-2"
+              onClick={() => {
+                router.push('/');
+                toast.success('Signed out successfully');
+              }}
+            >
               Sign Out
             </button>
           </div>
         </div>
         <Toaster />
       </div>
-      <div class="text-[#333] rounded-xl font-[sans-serif] linkDiv">
-        <div className="w-full flex items-center justify-center xl:pt-8  2xl:mt-10 2xl:pt-10">
-          <span class="mt-4 text-xl font-sans text-purple-700 font-medium">
-            Your link :
-            <span className="text-sm text-gray-600 font-sans font-medium ml-2 mr-5">
-              {" "}
-              {url}
-            </span>
-            <Tooltip title="Copy" onClick={() => copyToClipboard(url)}>
-              <IconButton
-                style={{
-                  fontSize: 13,
-                  paddingTop: 3,
-                  paddingBottom: 3,
-                  paddingLeft: 5,
-                  paddingRight: 5,
-                  borderRadius: 7,
-                  border: "1px solid #19a89d",
-                  color: "#19a89d",
-                  fontWeight: 700,
-                }}
-              >
-                Copy URL
-                <ContentCopyIcon
-                  size="sm"
-                  style={{ fontSize: 17, color: "#19a89d", marginLeft: 7 }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Generate QR Code" onClick={handleOpenQR}>
-              <IconButton
-                style={{
-                  fontSize: 13,
-                  paddingTop: 3,
-                  paddingBottom: 3,
-                  paddingLeft: 5,
-                  paddingRight: 5,
-                  borderRadius: 7,
-                  border: "1px solid #8a53fe",
-                  color: "#8a53fe",
-                  fontWeight: 700,
-                  marginLeft: 17,
-                }}
-              >
-                Generate QR Code
-                <QrCode2Icon
-                  size="sm"
-                  style={{ fontSize: 22, color: "#8a53fe", marginLeft: 7 }}
-                />
-              </IconButton>
-            </Tooltip>
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              open={openQr}
-              onClose={handleCloseQR}
-              closeAfterTransition
-              slots={{ backdrop: Backdrop }}
-              slotProps={{
-                backdrop: {
-                  timeout: 500,
-                },
-              }}
-            >
-              <Fade in={openQr}>
-                <Box sx={style} className="border-0">
-                  <Typography id="transition-modal-title" variant="h6" component="h2">
-                    Your Unique link QR Code is ready
-                  </Typography>
-                  {qrIsVisible && (
-                    <div className="qrcode__download" ref={qrCodeRef}>
-                      <div className="qrcode__image" >
-                        <QRCode value={url} size={200} />
-                      </div>
-                      <button className="bg-purple-200 text-purple-700 border rounded-lg p-3" onClick={downloadQRCode}>Download QR Code</button>
-                    </div>
-                  )}
-                </Box>
-              </Fade>
-            </Modal>
-          </span>
+      <div className="text-[#333] rounded-xl font-[sans-serif] linkDiv">
+        <div className="w-full flex items-center justify-center xl:pt-4 2xl:mt-5 2xl:pt-5">
+          <h1 className="mt-4 text-2xl font-sans text-purple-700 font-medium">
+            Your Link Dashboard
+          </h1>
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openQr}
+        onClose={handleCloseQR}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={openQr}>
+          <Box sx={style} className="border-0">
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Your Unique link QR Code is ready
+            </Typography>
+            {qrIsVisible && selectedShortCode && (
+              <div className="qrcode__download" ref={qrCodeRef}>
+                <div className="qrcode__image mb-4" >
+                  <QRCode value={`${url}${selectedShortCode}`} size={200} />
+                </div>
+                <div className="text-center mb-4 text-sm text-gray-600 break-all">
+                  {`${url}${selectedShortCode}`}
+                </div>
+                <button className="bg-purple-200 text-purple-700 border rounded-lg p-3 w-full" onClick={downloadQRCode}>Download QR Code</button>
+              </div>
+            )}
+          </Box>
+        </Fade>
+      </Modal>
       <div className="flex justify-center items-center liveCard">
         <div className=" xl:h-content 2xl:h-content w-content bg-white border rounded-2xl shadow-[0_12px_41px_-11px_rgba(199,199,199)]">
           <div className="xl:mx-3 xl:mt-2 2xl:mx-6 2xl:mt-5">
@@ -337,11 +377,11 @@ export default function Dashboard() {
                   style={{ borderRadius: 10 }}
                 >
                   <div className="font-sans mr-1 ml-1 text-xs font-base">
-                    2/4 Live
+                    {linkData?.filter(link => link.status === 'active').length}/{linkData?.length || 0} Live
                   </div>
                 </div>
               </div>
-              <button className="font-sans rounded-xl font-medium text-xs pl-3 pr-3 pt-0 pb-0 rounded-2xl bg-black text-white " onClick={handleOpenAddLinks}>
+              <button className="font-sans font-medium text-xs px-3 py-1 rounded-xl bg-black text-white" onClick={handleOpenAddLinks}>
                 Add Link <LinkIcon style={{ fontSize: 20, marginLeft: 2 }} />
               </button>
               <Modal
@@ -394,7 +434,9 @@ export default function Dashboard() {
                     >
                       Status
                     </StyledTableCell>
-                    <StyledTableCell align="left">Domain</StyledTableCell>
+                    <StyledTableCell align="left">Original URL</StyledTableCell>
+                    <StyledTableCell align="left">Short URL</StyledTableCell>
+                    <StyledTableCell align="left">Clicks</StyledTableCell>
                     <StyledTableCell
                       align="center"
                       style={{
@@ -415,7 +457,7 @@ export default function Dashboard() {
                           borderTopLeftRadius: 15,
                           borderBottomLeftRadius: 15,
                         }}
-                      >{row.status ==="active" ?  
+                      >{row.status ==="active" ?
                       <div
                           className="bg-green-300 text-green-800 w-fit h-auto p-1 font-sans flex"
                           style={{ borderRadius: 10 }}
@@ -436,7 +478,26 @@ export default function Dashboard() {
 
                       </StyledTableCell>
                       <StyledTableCell align="left">
-                        <a href={row.link} className="text-purple-700 text-sm font-sans font-medium">{row.link}</a>
+                        <a href={row.link} target="_blank" rel="noopener noreferrer" className="text-purple-700 text-sm font-sans font-medium hover:underline truncate max-w-xs block">
+                          {row.link}
+                        </a>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.shortCode ? (
+                          <a
+                            href={`${url}${row.shortCode}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-green-600 text-sm font-sans font-medium hover:underline"
+                          >
+                            {`${url}${row.shortCode}`}
+                          </a>
+                        ) : (
+                          <span className="text-gray-400 text-sm">No short URL</span>
+                        )}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <span className="text-blue-600 font-medium">{row.clicks || 0}</span>
                       </StyledTableCell>
                       <StyledTableCell
                         align="right"
@@ -447,8 +508,11 @@ export default function Dashboard() {
                       >
                         {" "}
                         <div>
-                          <Tooltip title="Copy" onClick={copyToClipboard}>
-                            <IconButton style={{ paddingLeft: 0 }}>
+                          <Tooltip title="Copy Short URL">
+                            <IconButton
+                              style={{ paddingLeft: 0 }}
+                              onClick={() => copyShortUrl(row.shortCode)}
+                            >
                               <ContentCopyIcon
                                 size="sm"
                                 style={{ fontSize: 17, color: "#19a89d" }}
@@ -488,10 +552,27 @@ export default function Dashboard() {
                             <MenuItem
                               size="sm"
                               className="text-sm text-slate-500"
-                              onClick={handleClose}
+                              onClick={() => {
+                                handleClose();
+                                if (row.shortCode) {
+                                  handleOpenQR(row.shortCode);
+                                } else {
+                                  toast.error("No short URL available for QR code");
+                                }
+                              }}
                             >
-                              <LinkOffIcon className="mr-2 inActive text-cyan-500" /> In
-                              Active
+                              <QrCode2Icon className="mr-2 text-purple-500" /> Generate QR
+                            </MenuItem>
+                            <MenuItem
+                              size="sm"
+                              className="text-sm text-slate-500"
+                              onClick={() => {
+                                handleClose();
+                                toggleLinkStatus(row._id, row.status);
+                              }}
+                            >
+                              <LinkOffIcon className="mr-2 inActive text-cyan-500" />
+                              {row.status === 'active' ? 'Deactivate' : 'Activate'}
                             </MenuItem>
                             <MenuItem
                               size="sm"
@@ -503,7 +584,10 @@ export default function Dashboard() {
                             <MenuItem
                               size="sm"
                               className="text-sm text-slate-500"
-                              onClick={handleClose}
+                              onClick={() => {
+                                handleClose();
+                                deleteLink(row._id, row.title);
+                              }}
                             >
                               <DeleteIcon className="mr-2 deleteOptions text-red-500" />{" "}
                               Delete
