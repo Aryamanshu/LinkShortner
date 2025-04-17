@@ -2,15 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Logo from './Logo';
+import UserButton from './UserButton';
 import toast from 'react-hot-toast';
 
 export default function Header({ user, showNav = true }) {
   const router = useRouter();
-
-  const handleSignOut = () => {
-    router.push('/');
-    toast.success('Signed out successfully');
-  };
 
   return (
     <header className="bg-dark-800 border-b border-teal-700/20 shadow-md">
@@ -34,12 +30,7 @@ export default function Header({ user, showNav = true }) {
 
           <div className="flex items-center space-x-4">
             {user ? (
-              <button
-                onClick={handleSignOut}
-                className="btn-outline"
-              >
-                Sign Out
-              </button>
+              <UserButton user={user} />
             ) : (
               <>
                 <Link href="/" className="text-beige-500 hover:text-teal-500 transition-colors">

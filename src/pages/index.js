@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
@@ -8,12 +8,23 @@ import Layout from "@/components/Layout";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Logo from "@/components/Logo";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isGitHubLoading, setIsGitHubLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  // GitHub OAuth URL
+  const githubOAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/github/callback'
+  )}&scope=user:email`;
+
+  // Google OAuth URL
+  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/google/callback'
+  )}&response_type=code&scope=profile email`;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -63,19 +74,122 @@ export default function Home() {
     }
   };
 
+  // Handle GitHub sign in
+  const handleGitHubSignIn = () => {
+    console.log('GitHub OAuth URL:', githubOAuthUrl);
+    console.log('GitHub Client ID:', process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID);
+    console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL);
+
+    setIsGitHubLoading(true);
+    window.location.href = githubOAuthUrl;
+  };
+
+  // Handle Google sign in
+  const handleGoogleSignIn = () => {
+    console.log('Google OAuth URL:', googleOAuthUrl);
+    console.log('Google Client ID:', process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+    console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL);
+
+    setGoogleLoading(true);
+    window.location.href = googleOAuthUrl;
+  };
+
+  // Animation variants
+  const pageVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+        duration: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12
+      }
+    }
+  };
+
+  const featureCardVariants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100, damping: 12 }
+    },
+    hover: {
+      scale: 1.05,
+      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+      backgroundColor: "rgba(242, 239, 231, 0.1)",
+      transition: { type: "spring", stiffness: 400, damping: 10 }
+    }
+  };
+
+  const logoVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        delay: 0.2,
+        duration: 0.5
+      }
+    }
+  };
+
   return (
     <Layout title="Sign In - TinyHost" showHeader={false} showFooter={false}>
-      <div className="min-h-screen flex flex-col md:flex-row">
+      <motion.div
+        className="min-h-screen flex flex-col md:flex-row"
+        initial="hidden"
+        animate="visible"
+        variants={pageVariants}
+      >
         {/* Left side - Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 flex items-center justify-center bg-dark-800">
-          <div className="w-full max-w-md space-y-8 animate-fade-in">
+        <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 flex items-center justify-center bg-gradient-to-br from-dark-900 to-dark-800 relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-600/5 rounded-full -ml-48 -mb-48 blur-3xl"></div>
+
+          <motion.div
+            className="w-full max-w-md space-y-8 relative z-10"
+            variants={itemVariants}
+          >
             <div className="text-center mb-10">
-              <Logo size="large" className="mb-6 inline-block text-teal-500" />
-              <h1 className="text-3xl font-bold text-beige-500">Welcome back</h1>
-              <p className="mt-2 text-beige-600">Sign in to your account to continue</p>
+              <motion.div variants={logoVariants}>
+                <Logo size="large" className="mb-6 inline-block text-teal-500" />
+              </motion.div>
+              <motion.h1
+                className="text-3xl font-bold text-beige-500 mb-2"
+                variants={itemVariants}
+              >
+                Welcome back
+              </motion.h1>
+              <motion.p
+                className="text-beige-600"
+                variants={itemVariants}
+              >
+                Sign in to your account to continue
+              </motion.p>
             </div>
 
-            <form onSubmit={handleSignIn} className="space-y-6">
+            <motion.form
+              onSubmit={handleSignIn}
+              className="space-y-6"
+              variants={itemVariants}
+            >
               <Input
                 label="Username"
                 id="username"
@@ -84,6 +198,11 @@ export default function Home() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 error={errors.username}
+                icon={
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                }
               />
 
               <Input
@@ -94,6 +213,11 @@ export default function Home() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 error={errors.password}
+                icon={
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                }
               />
 
               <div className="flex items-center justify-between">
@@ -102,114 +226,184 @@ export default function Home() {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    className="h-4 w-4 rounded border-teal-700/30 bg-dark-700/50 text-teal-500 focus:ring-teal-500"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-beige-600">
                     Remember me
                   </label>
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
+                  <a href="#" className="font-medium text-teal-500 hover:text-teal-400 transition-colors">
                     Forgot password?
                   </a>
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                variant="primary"
-                fullWidth
-                isLoading={isLoading}
-              >
-                Sign In
-              </Button>
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  fullWidth
+                  isLoading={isLoading}
+                  icon={
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                  }
+                >
+                  Sign In
+                </Button>
+              </div>
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
+                  <div className="w-full border-t border-teal-700/20"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                  <span className="bg-dark-800 px-3 text-beige-600">Or continue with</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <button
+                <Button
                   type="button"
-                  className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                  onClick={() => setIsGitHubLoading(true)}
+                  variant="secondary"
+                  onClick={handleGitHubSignIn}
                   disabled={isGitHubLoading}
+                  isLoading={isGitHubLoading}
+                  icon={!isGitHubLoading && <Icons.gitHub className="h-4 w-4" />}
                 >
-                  {isGitHubLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Icons.gitHub className="mr-2 h-4 w-4" />
-                  )}
                   GitHub
-                </button>
+                </Button>
 
-                <button
+                <Button
                   type="button"
-                  className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                  onClick={() => setGoogleLoading(true)}
+                  variant="secondary"
+                  onClick={handleGoogleSignIn}
                   disabled={googleLoading}
+                  isLoading={googleLoading}
+                  icon={
+                    !googleLoading && (
+                      <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                      </svg>
+                    )
+                  }
                 >
-                  {googleLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <svg className="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                    </svg>
-                  )}
                   Google
-                </button>
+                </Button>
               </div>
-            </form>
+            </motion.form>
 
-            <p className="mt-10 text-center text-sm text-gray-500">
+            <motion.p
+              className="mt-10 text-center text-sm text-beige-600"
+              variants={itemVariants}
+            >
               Don't have an account?{' '}
-              <Link href="/signup" className="font-medium text-primary-600 hover:text-primary-500">
+              <Link href="/signup" className="font-medium text-teal-500 hover:text-teal-400 transition-colors">
                 Sign up now
               </Link>
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
 
         {/* Right side - Image/Gradient */}
         <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-teal-700 via-teal-600 to-teal-500 relative overflow-hidden">
+          {/* Background patterns */}
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-30"></div>
           <div className="absolute inset-0 bg-gradient-to-br from-teal-800/80 via-teal-700/80 to-teal-600/80 backdrop-blur-sm"></div>
+
           <div className="relative h-full flex flex-col justify-center items-center text-beige-500 p-12">
-            <div className="max-w-md text-center">
-              <div className="mb-8 inline-block p-2 bg-beige-500/10 rounded-2xl">
-                <svg className="w-12 h-12 text-beige-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            <motion.div
+              className="max-w-md text-center"
+              variants={itemVariants}
+            >
+              <motion.div
+                className="mb-8 inline-block p-4 bg-beige-500/10 rounded-2xl backdrop-blur-sm border border-beige-500/10 shadow-xl"
+                initial={{ rotate: -5, scale: 0.9 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.3 }}
+              >
+                <svg className="w-16 h-16 text-beige-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                 </svg>
-              </div>
-              <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-beige-400 to-beige-500">Simplify your links</h2>
-              <p className="text-lg mb-8 text-beige-500">Create short, memorable links that redirect to your long URLs. Track clicks and manage all your links in one place.</p>
+              </motion.div>
+
+              <motion.h2
+                className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-beige-400 to-beige-500"
+                variants={itemVariants}
+              >
+                Simplify your links
+              </motion.h2>
+
+              <motion.p
+                className="text-lg mb-8 text-beige-500"
+                variants={itemVariants}
+              >
+                Create short, memorable links that redirect to your long URLs. Track clicks and manage all your links in one place.
+              </motion.p>
+
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center transform transition-transform hover:scale-105 hover:bg-beige-500/10">
+                <motion.div
+                  className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center shadow-lg"
+                  variants={featureCardVariants}
+                  whileHover="hover"
+                >
                   <span className="text-2xl font-bold text-teal-500">Fast</span>
                   <span className="text-sm mt-1 text-beige-500">Creation</span>
-                </div>
-                <div className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center transform transition-transform hover:scale-105 hover:bg-beige-500/10">
+                </motion.div>
+
+                <motion.div
+                  className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center shadow-lg"
+                  variants={featureCardVariants}
+                  whileHover="hover"
+                  transition={{ delay: 0.1 }}
+                >
                   <span className="text-2xl font-bold text-teal-600">Easy</span>
                   <span className="text-sm mt-1 text-beige-500">Sharing</span>
-                </div>
-                <div className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center transform transition-transform hover:scale-105 hover:bg-beige-500/10">
+                </motion.div>
+
+                <motion.div
+                  className="bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center shadow-lg"
+                  variants={featureCardVariants}
+                  whileHover="hover"
+                  transition={{ delay: 0.2 }}
+                >
                   <span className="text-2xl font-bold text-teal-700">Smart</span>
                   <span className="text-sm mt-1 text-beige-500">Analytics</span>
-                </div>
+                </motion.div>
               </div>
-            </div>
+
+              <motion.div
+                className="mt-10 bg-beige-500/5 border border-beige-500/10 backdrop-blur-sm rounded-xl p-5 shadow-lg"
+                variants={itemVariants}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center">
+                    <div className="h-8 w-8 rounded-full bg-teal-500/20 flex items-center justify-center mr-3">
+                      <svg className="h-4 w-4 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <span className="text-beige-500 font-medium">Try it now</span>
+                  </div>
+                  <div className="text-xs text-beige-600 bg-beige-500/10 px-2 py-1 rounded-full">
+                    Free
+                  </div>
+                </div>
+                <p className="text-sm text-beige-600">Sign up today and get access to all premium features for 14 days.</p>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Layout>
   );
 }
