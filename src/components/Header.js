@@ -8,11 +8,14 @@ import toast from 'react-hot-toast';
 export default function Header({ user, showNav = true }) {
   const router = useRouter();
 
+  // Make logo clickable only on sign-in and sign-up pages
+  const isAuthPage = router.pathname === '/' || router.pathname === '/signup';
+
   return (
     <header className="bg-dark-800 border-b border-teal-700/20 shadow-md">
       <div className="app-container py-4">
         <div className="flex items-center justify-between">
-          <Logo className="text-teal-500" />
+          <Logo className="text-teal-500" linkToHome={isAuthPage} />
 
           {showNav && (
             <nav className="hidden md:flex items-center space-x-8">

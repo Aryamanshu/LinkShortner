@@ -54,6 +54,19 @@ export default function SettingsPage() {
   const fetchUserData = async () => {
     setIsLoading(true);
     try {
+      // First, get user data
+      const userResponse = await fetch(`${URI}/api/getuser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ userID: slug }),
+      });
+
+      const userResult = await userResponse.json();
+      console.log('User result:', userResult);
+
+      // Then, get links data
       const response = await fetch(`${URI}/api/getlinks`, {
         method: "POST",
         headers: {
@@ -64,16 +77,28 @@ export default function SettingsPage() {
 
       const result = await response.json();
 
-      if (response.ok) {
-        const userData = {
-          username: "User", // Default username
-          email: "user@example.com" // Default email
-        };
-        setUserData(userData);
-        setUsername(userData.username || "");
-        setEmail(userData.email || "");
+      if (userResponse.ok && response.ok) {
+        // Get user data from the user API response
+        const user = userResult.data || {};
+        const links = result.data || {};
+
+        console.log('User data from API:', user);
+        console.log('Links data from API:', links);
+
+        // Set user data with actual values from API
+        setUserData({
+          id: slug,
+          _id: slug,
+          username: user.username || `user_${slug.substring(0, 6)}`,
+          email: user.email || "",
+          createdAt: user.createdAt || new Date().toISOString()
+        });
+
+        // Set form fields
+        setUsername(user.username || `user_${slug.substring(0, 6)}`);
+        setEmail(user.email || "");
       } else {
-        toast.error(result.error || "Failed to fetch user data");
+        toast.error(userResult.error || result.error || "Failed to fetch user data");
       }
     } catch (error) {
       console.error("Error fetching user data:", error);

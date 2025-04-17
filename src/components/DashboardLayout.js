@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
 import Logo from './Logo';
+import UserButton from './UserButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -165,7 +166,7 @@ export default function DashboardLayout({
           animate={isMobileSidebarOpen ? "open" : "closed"}
         >
           <div className="flex items-center justify-between p-5 border-b border-teal-700/20">
-            <Logo className="text-teal-500" />
+            <Logo className="text-teal-500" linkToHome={false} />
             <button
               className="text-beige-500 hover:text-teal-500 focus:outline-none"
               onClick={() => setIsMobileSidebarOpen(false)}
@@ -282,7 +283,7 @@ export default function DashboardLayout({
           <div className="h-full flex flex-col">
             <div className="flex items-center justify-between p-5 border-b border-teal-700/20">
               <motion.div variants={textVariants}>
-                <Logo className="text-teal-500" />
+                <Logo className="text-teal-500" linkToHome={false} />
               </motion.div>
 
               <button
@@ -436,7 +437,7 @@ export default function DashboardLayout({
                     </svg>
                   </button>
                   <div className="ml-4 lg:hidden">
-                    <Logo className="text-teal-500" />
+                    <Logo className="text-teal-500" linkToHome={false} />
                   </div>
                   <div className="hidden lg:flex items-center space-x-2">
                     <h1 className="text-xl font-bold text-beige-500">{activeNav}</h1>
@@ -470,20 +471,7 @@ export default function DashboardLayout({
                   </button>
 
                   {user && (
-                    <div className="relative flex items-center">
-                      <button
-                        onClick={() => handleNavigation('Settings')}
-                        className="flex items-center space-x-2 bg-dark-700/50 rounded-lg px-3 py-1.5 border border-teal-700/20 hover:bg-dark-700 transition-colors"
-                      >
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-beige-500 font-semibold shadow-md">
-                          {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                        </div>
-                        <span className="text-beige-500 font-medium hidden sm:block">{user.username || 'User'}</span>
-                        <svg className="h-5 w-5 text-beige-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                    </div>
+                    <UserButton user={user} />
                   )}
                 </div>
               </div>
@@ -506,7 +494,7 @@ export default function DashboardLayout({
           <footer className="bg-dark-800/80 backdrop-blur-sm border-t border-teal-700/20 py-4 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <div className="text-beige-600 text-sm mb-2 sm:mb-0 flex items-center">
-                <Logo className="text-teal-500 mr-2 h-5" />
+                <Logo className="text-teal-500 mr-2 h-5" linkToHome={false} />
                 <span>&copy; {new Date().getFullYear()} All rights reserved</span>
               </div>
               <div className="text-beige-600 text-sm flex space-x-6">

@@ -11,17 +11,45 @@ export default async function handler(req, res) {
     const { userID } = req.body;
 
     // Validate input
-    if (!userID) {
-      return res.status(400).json({ error: "User ID is required" });
+    if (!userID || userID === 'undefined') {
+      return res.status(400).json({
+        error: "Invalid user ID",
+        data: {
+          _id: null,
+          username: 'Guest',
+          email: null
+        }
+      });
     }
 
     await connectDB();
 
     // Find the user by ID
-    const user = await userModel.findById(userID);
-    
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    let user;
+    try {
+      user = await userModel.findById(userID);
+
+      if (!user) {
+        return res.status(404).json({
+          error: "User not found",
+          data: {
+            _id: null,
+            username: 'Guest',
+            email: null
+          }
+        });
+      }
+    } catch (err) {
+      // Handle invalid ObjectId format
+      console.error("Invalid ObjectId format:", err);
+      return res.status(400).json({
+        error: "Invalid user ID format",
+        data: {
+          _id: null,
+          username: 'Guest',
+          email: null
+        }
+      });
     }
 
     // Return user data without links (for efficiency)
@@ -36,7 +64,7 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Get user error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: "Internal server error",
       message: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined

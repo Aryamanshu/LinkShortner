@@ -25,6 +25,11 @@ export default function UserButton({ user }) {
 
   const handleSignOut = () => {
     setIsOpen(false);
+    // Clear any user data from localStorage if needed
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    // Redirect to home page
     router.push('/');
     toast.success('Signed out successfully');
   };
@@ -38,19 +43,19 @@ export default function UserButton({ user }) {
   // Animation variants
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { 
+      transition: {
         type: 'spring',
         stiffness: 300,
         damping: 20
       }
     },
-    exit: { 
-      opacity: 0, 
-      y: -10, 
+    exit: {
+      opacity: 0,
+      y: -10,
       scale: 0.95,
       transition: { duration: 0.2 }
     }
@@ -65,9 +70,9 @@ export default function UserButton({ user }) {
         aria-haspopup="true"
       >
         {user?.avatar ? (
-          <img 
-            src={user.avatar} 
-            alt={user.username || 'User'} 
+          <img
+            src={user.avatar}
+            alt={user.username || 'User'}
             className="h-10 w-10 rounded-full object-cover border-2 border-teal-500/50 group-hover:border-teal-500 transition-colors"
           />
         ) : (
@@ -75,15 +80,15 @@ export default function UserButton({ user }) {
             {getInitials()}
           </div>
         )}
-        
+
         <span className="ml-2 text-beige-500 group-hover:text-teal-500 transition-colors hidden sm:block">
           {user?.username || 'User'}
         </span>
-        
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          className={`ml-2 h-5 w-5 text-beige-600 group-hover:text-teal-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
-          viewBox="0 0 20 20" 
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`ml-2 h-5 w-5 text-beige-600 group-hover:text-teal-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          viewBox="0 0 20 20"
           fill="currentColor"
         >
           <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -102,9 +107,9 @@ export default function UserButton({ user }) {
             <div className="p-4 border-b border-teal-700/20">
               <div className="flex items-center">
                 {user?.avatar ? (
-                  <img 
-                    src={user.avatar} 
-                    alt={user.username || 'User'} 
+                  <img
+                    src={user.avatar}
+                    alt={user.username || 'User'}
                     className="h-10 w-10 rounded-full object-cover border-2 border-teal-500/50"
                   />
                 ) : (
@@ -118,10 +123,10 @@ export default function UserButton({ user }) {
                 </div>
               </div>
             </div>
-            
+
             <div className="py-1">
-              <Link 
-                href={`/dashboard/${user?._id}`}
+              <Link
+                href={user?._id ? `/dashboard/${user._id}` : user?.id ? `/dashboard/${user.id}` : '/'}
                 className="flex items-center px-4 py-2 text-sm text-beige-500 hover:bg-teal-500/10 hover:text-teal-500 transition-colors"
                 onClick={() => setIsOpen(false)}
               >
@@ -130,9 +135,9 @@ export default function UserButton({ user }) {
                 </svg>
                 Dashboard
               </Link>
-              
-              <Link 
-                href={`/u/${user?.username}`}
+
+              <Link
+                href={user?.username ? `/u/${user.username}` : user?.id ? `/u/${user.id}` : '/'}
                 className="flex items-center px-4 py-2 text-sm text-beige-500 hover:bg-teal-500/10 hover:text-teal-500 transition-colors"
                 onClick={() => setIsOpen(false)}
               >
@@ -141,20 +146,10 @@ export default function UserButton({ user }) {
                 </svg>
                 My Public Links
               </Link>
-              
-              <Link 
-                href="/settings"
-                className="flex items-center px-4 py-2 text-sm text-beige-500 hover:bg-teal-500/10 hover:text-teal-500 transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Settings
-              </Link>
+
+
             </div>
-            
+
             <div className="py-1 border-t border-teal-700/20">
               <button
                 onClick={handleSignOut}

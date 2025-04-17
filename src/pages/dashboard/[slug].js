@@ -66,7 +66,9 @@ export default function Dashboard() {
         setLinkData(linksResult?.data.links || []);
         setUserData({
           id: slug,
-          username: userResult?.data?.username || `user_${slug.substring(0, 6)}`
+          _id: slug,  // Add _id for compatibility with UserButton
+          username: userResult?.data?.username || `user_${slug.substring(0, 6)}`,
+          email: userResult?.data?.email
         });
       } else {
         toast.error(linksResult.error || userResult.error || "Failed to fetch data");
