@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { URI } from '@/source';
+import { URI, BASE_URL } from '@/source';
 import Layout from '@/components/Layout';
 
 export default function GitHubAuth() {

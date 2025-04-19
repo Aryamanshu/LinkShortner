@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 import toast from "react-hot-toast";
-import { URI } from "@/source";
+import { URI, BASE_URL } from "@/source";
 import Layout from "@/components/Layout";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
@@ -18,12 +18,12 @@ export default function Home() {
 
   // GitHub OAuth URL
   const githubOAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-    process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/github/callback'
+    BASE_URL + '/api/auth/github/callback'
   )}&scope=user:email`;
 
   // Google OAuth URL
   const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-    process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/google/callback'
+    BASE_URL + '/api/auth/google/callback'
   )}&response_type=code&scope=profile email`;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

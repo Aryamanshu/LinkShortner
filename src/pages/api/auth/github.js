@@ -3,10 +3,12 @@ import connectDB from "../../../lib/connectDB";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
+import { BASE_URL } from '../../../source';
+
 // GitHub OAuth configuration
 const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-const GITHUB_REDIRECT_URI = process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/github/callback';
+const GITHUB_REDIRECT_URI = BASE_URL + '/api/auth/github/callback';
 
 console.log('GitHub OAuth configuration:', {
   GITHUB_CLIENT_ID,
