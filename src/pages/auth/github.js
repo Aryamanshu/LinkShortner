@@ -13,6 +13,10 @@ export default function GitHubAuth() {
   useEffect(() => {
     if (!code) return;
 
+    console.log('GitHub auth page - code received:', code);
+    console.log('GitHub auth page - BASE_URL:', BASE_URL);
+    console.log('GitHub auth page - URI:', URI);
+
     const handleGitHubAuth = async () => {
       try {
         setIsLoading(true);

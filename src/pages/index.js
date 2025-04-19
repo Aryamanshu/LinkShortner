@@ -76,9 +76,17 @@ export default function Home() {
 
   // Handle GitHub sign in
   const handleGitHubSignIn = () => {
+    // Calculate the exact redirect URI that will be sent to GitHub
+    const exactRedirectUri = BASE_URL + '/api/auth/github/callback';
+
     console.log('GitHub OAuth URL:', githubOAuthUrl);
     console.log('GitHub Client ID:', process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID);
-    console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL);
+    console.log('Base URL (from env):', process.env.NEXT_PUBLIC_BASE_URL);
+    console.log('Base URL (dynamic):', BASE_URL);
+    console.log('Exact redirect URI:', exactRedirectUri);
+
+    // Show alert with the redirect URI for easy copying
+    alert(`Please add this exact redirect URI to your GitHub OAuth App settings:\n\n${exactRedirectUri}`);
 
     setIsGitHubLoading(true);
     window.location.href = githubOAuthUrl;

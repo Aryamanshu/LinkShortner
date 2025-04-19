@@ -7,3 +7,11 @@
 
 [build.environment]
   NEXT_PUBLIC_BASE_URL = "https://tinyhosts.netlify.app"
+  NODE_ENV = "production"
+
+# Redirect for GitHub OAuth callback
+[[redirects]]
+  from = "/api/auth/github/callback"
+  to = "/api/auth/github/callback"
+  status = 200
+  force = true
