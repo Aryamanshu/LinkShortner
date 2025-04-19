@@ -19,7 +19,7 @@ export default function TestOAuth() {
       <div className="app-container py-12">
         <div className="max-w-3xl mx-auto bg-dark-800 p-8 rounded-xl shadow-lg border border-teal-700/20">
           <h1 className="text-2xl font-bold text-beige-500 mb-6">OAuth Configuration Test</h1>
-          
+
           <div className="space-y-6">
             <div className="bg-dark-700 p-4 rounded-lg">
               <h2 className="text-lg font-medium text-beige-500 mb-2">GitHub Redirect URI</h2>
@@ -27,7 +27,7 @@ export default function TestOAuth() {
               <div className="bg-dark-900 p-3 rounded font-mono text-sm text-teal-500 break-all">
                 {redirectUri}
               </div>
-              <button 
+              <button
                 className="mt-3 px-4 py-2 bg-teal-600 text-beige-500 rounded-lg text-sm hover:bg-teal-500 transition-colors"
                 onClick={() => {
                   navigator.clipboard.writeText(redirectUri);
@@ -62,7 +62,7 @@ export default function TestOAuth() {
                 <li>Copy the GitHub Redirect URI above</li>
                 <li>Go to <a href="https://github.com/settings/developers" target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:underline">GitHub Developer Settings</a></li>
                 <li>Select your OAuth App</li>
-                <li>Update the "Authorization callback URL" with the exact URI above</li>
+                <li>Update the &quot;Authorization callback URL&quot; with the exact URI above</li>
                 <li>Save your changes</li>
                 <li>Try signing in with GitHub again</li>
               </ol>
