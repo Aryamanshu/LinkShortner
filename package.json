@@ -27,6 +27,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.10.7",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
