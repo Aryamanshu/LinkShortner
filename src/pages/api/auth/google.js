@@ -3,15 +3,21 @@ import connectDB from "../../../lib/connectDB";
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
+import { BASE_URL } from '../../../source';
+
 // Google OAuth configuration
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_BASE_URL + '/api/auth/google/callback';
+const GOOGLE_REDIRECT_URI = BASE_URL + '/api/auth/google/callback';
 
+// Log detailed Google OAuth configuration for debugging
 console.log('Google OAuth configuration:', {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET ? '***' : undefined,
-  GOOGLE_REDIRECT_URI
+  GOOGLE_REDIRECT_URI,
+  BASE_URL,
+  'process.env.NEXT_PUBLIC_BASE_URL': process.env.NEXT_PUBLIC_BASE_URL,
+  'process.env.NODE_ENV': process.env.NODE_ENV
 });
 
 export default async function handler(req, res) {

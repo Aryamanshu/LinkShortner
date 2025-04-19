@@ -3,13 +3,15 @@ import { BASE_URL } from '@/source';
 import Layout from '@/components/Layout';
 
 export default function TestOAuth() {
-  const [redirectUri, setRedirectUri] = useState('');
+  const [githubRedirectUri, setGithubRedirectUri] = useState('');
+  const [googleRedirectUri, setGoogleRedirectUri] = useState('');
   const [windowLocation, setWindowLocation] = useState('');
   const [envBaseUrl, setEnvBaseUrl] = useState('');
 
   useEffect(() => {
     // Get all the values we need to debug
-    setRedirectUri(BASE_URL + '/api/auth/github/callback');
+    setGithubRedirectUri(BASE_URL + '/api/auth/github/callback');
+    setGoogleRedirectUri(BASE_URL + '/api/auth/google/callback');
     setWindowLocation(typeof window !== 'undefined' ? window.location.origin : 'N/A');
     setEnvBaseUrl(process.env.NEXT_PUBLIC_BASE_URL || 'Not set');
   }, []);
@@ -25,13 +27,30 @@ export default function TestOAuth() {
               <h2 className="text-lg font-medium text-beige-500 mb-2">GitHub Redirect URI</h2>
               <p className="text-beige-600 mb-2">This is the exact URI that should be configured in your GitHub OAuth App:</p>
               <div className="bg-dark-900 p-3 rounded font-mono text-sm text-teal-500 break-all">
-                {redirectUri}
+                {githubRedirectUri}
               </div>
               <button
                 className="mt-3 px-4 py-2 bg-teal-600 text-beige-500 rounded-lg text-sm hover:bg-teal-500 transition-colors"
                 onClick={() => {
-                  navigator.clipboard.writeText(redirectUri);
-                  alert('Copied to clipboard!');
+                  navigator.clipboard.writeText(githubRedirectUri);
+                  alert('GitHub redirect URI copied to clipboard!');
+                }}
+              >
+                Copy to Clipboard
+              </button>
+            </div>
+
+            <div className="bg-dark-700 p-4 rounded-lg">
+              <h2 className="text-lg font-medium text-beige-500 mb-2">Google Redirect URI</h2>
+              <p className="text-beige-600 mb-2">This is the exact URI that should be configured in your Google OAuth App:</p>
+              <div className="bg-dark-900 p-3 rounded font-mono text-sm text-teal-500 break-all">
+                {googleRedirectUri}
+              </div>
+              <button
+                className="mt-3 px-4 py-2 bg-teal-600 text-beige-500 rounded-lg text-sm hover:bg-teal-500 transition-colors"
+                onClick={() => {
+                  navigator.clipboard.writeText(googleRedirectUri);
+                  alert('Google redirect URI copied to clipboard!');
                 }}
               >
                 Copy to Clipboard
@@ -57,7 +76,7 @@ export default function TestOAuth() {
             </div>
 
             <div className="bg-dark-700 p-4 rounded-lg">
-              <h2 className="text-lg font-medium text-beige-500 mb-2">Instructions</h2>
+              <h2 className="text-lg font-medium text-beige-500 mb-2">GitHub Instructions</h2>
               <ol className="list-decimal list-inside space-y-2 text-beige-600">
                 <li>Copy the GitHub Redirect URI above</li>
                 <li>Go to <a href="https://github.com/settings/developers" target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:underline">GitHub Developer Settings</a></li>
@@ -65,6 +84,18 @@ export default function TestOAuth() {
                 <li>Update the &quot;Authorization callback URL&quot; with the exact URI above</li>
                 <li>Save your changes</li>
                 <li>Try signing in with GitHub again</li>
+              </ol>
+            </div>
+
+            <div className="bg-dark-700 p-4 rounded-lg">
+              <h2 className="text-lg font-medium text-beige-500 mb-2">Google Instructions</h2>
+              <ol className="list-decimal list-inside space-y-2 text-beige-600">
+                <li>Copy the Google Redirect URI above</li>
+                <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:underline">Google Cloud Console</a></li>
+                <li>Select your OAuth 2.0 Client ID</li>
+                <li>Under &quot;Authorized redirect URIs&quot;, add the exact URI above</li>
+                <li>Click Save</li>
+                <li>Try signing in with Google again</li>
               </ol>
             </div>
           </div>

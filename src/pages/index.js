@@ -25,6 +25,13 @@ export default function Home() {
   const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     BASE_URL + '/api/auth/google/callback'
   )}&response_type=code&scope=profile email`;
+
+  // Log the Google OAuth URL for debugging
+  console.log('Google OAuth URL:', {
+    url: googleOAuthUrl,
+    redirectUri: BASE_URL + '/api/auth/google/callback',
+    clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
