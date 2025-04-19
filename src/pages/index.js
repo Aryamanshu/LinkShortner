@@ -25,13 +25,6 @@ export default function Home() {
   const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     BASE_URL + '/api/auth/google/callback'
   )}&response_type=code&scope=profile email`;
-
-  // Log the Google OAuth URL for debugging
-  console.log('Google OAuth URL:', {
-    url: googleOAuthUrl,
-    redirectUri: BASE_URL + '/api/auth/google/callback',
-    clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -83,28 +76,12 @@ export default function Home() {
 
   // Handle GitHub sign in
   const handleGitHubSignIn = () => {
-    // Calculate the exact redirect URI that will be sent to GitHub
-    const exactRedirectUri = BASE_URL + '/api/auth/github/callback';
-
-    console.log('GitHub OAuth URL:', githubOAuthUrl);
-    console.log('GitHub Client ID:', process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID);
-    console.log('Base URL (from env):', process.env.NEXT_PUBLIC_BASE_URL);
-    console.log('Base URL (dynamic):', BASE_URL);
-    console.log('Exact redirect URI:', exactRedirectUri);
-
-    // Show alert with the redirect URI for easy copying
-    alert(`Please add this exact redirect URI to your GitHub OAuth App settings:\n\n${exactRedirectUri}`);
-
     setIsGitHubLoading(true);
     window.location.href = githubOAuthUrl;
   };
 
   // Handle Google sign in
   const handleGoogleSignIn = () => {
-    console.log('Google OAuth URL:', googleOAuthUrl);
-    console.log('Google Client ID:', process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
-    console.log('Base URL:', process.env.NEXT_PUBLIC_BASE_URL);
-
     setGoogleLoading(true);
     window.location.href = googleOAuthUrl;
   };

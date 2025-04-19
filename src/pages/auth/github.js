@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { URI, BASE_URL } from '@/source';
+import { URI } from '@/source';
 import Layout from '@/components/Layout';
 
 export default function GitHubAuth() {
@@ -12,10 +12,6 @@ export default function GitHubAuth() {
 
   useEffect(() => {
     if (!code) return;
-
-    console.log('GitHub auth page - code received:', code);
-    console.log('GitHub auth page - BASE_URL:', BASE_URL);
-    console.log('GitHub auth page - URI:', URI);
 
     const handleGitHubAuth = async () => {
       try {

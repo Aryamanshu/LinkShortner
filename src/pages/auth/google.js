@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { URI, BASE_URL } from '@/source';
+import { URI } from '@/source';
 import Layout from '@/components/Layout';
 
 export default function GoogleAuth() {
@@ -12,10 +12,6 @@ export default function GoogleAuth() {
 
   useEffect(() => {
     if (!code) return;
-
-    console.log('Google auth page - code received:', code);
-    console.log('Google auth page - BASE_URL:', BASE_URL);
-    console.log('Google auth page - URI:', URI);
 
     const handleGoogleAuth = async () => {
       try {

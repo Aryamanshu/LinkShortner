@@ -10,15 +10,8 @@ const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GITHUB_REDIRECT_URI = BASE_URL + '/api/auth/github/callback';
 
-// Log detailed GitHub OAuth configuration for debugging
-console.log('GitHub OAuth configuration:', {
-  GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET: GITHUB_CLIENT_SECRET ? '***' : undefined,
-  GITHUB_REDIRECT_URI,
-  BASE_URL,
-  'process.env.NEXT_PUBLIC_BASE_URL': process.env.NEXT_PUBLIC_BASE_URL,
-  'process.env.NODE_ENV': process.env.NODE_ENV
-});
+// GitHub OAuth configuration logging (minimal)
+console.log('GitHub OAuth configured with redirect URI:', GITHUB_REDIRECT_URI);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
